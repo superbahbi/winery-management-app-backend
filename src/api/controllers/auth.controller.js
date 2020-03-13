@@ -15,9 +15,8 @@ exports.login = async (req, res, next) => {
         } else if (!user.validPassword(req.body.password)) {
           res.status(400).json("Invalid username or password");
         } else {
-          //return token here
           const token = user.token();
-          res.status(200).json(token);
+          res.status(200).json({ token: token, user: user });
         }
       } else {
         res.status(400).json("Cant find user");
@@ -41,7 +40,8 @@ exports.register = async (req, res, next) => {
     username: req.body.username,
     password: req.body.password,
     name: req.body.name,
-    email: req.body.email
+    email: req.body.email,
+    role: "registered"
   };
   User.create(newUser)
     .then(data => {
