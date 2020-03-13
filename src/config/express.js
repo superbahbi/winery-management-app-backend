@@ -7,6 +7,8 @@ const cors = require("cors");
 const helmet = require("helmet");
 const routes = require("../api/routes/v1");
 const { logs } = require("./vars");
+const passport = require("passport");
+const strategies = require("./passport");
 /**
  * Express instance
  * @public
@@ -34,9 +36,8 @@ app.use(helmet());
 app.use(cors());
 
 // // enable authentication
-// app.use(passport.initialize());
-// passport.use("jwt", strategies.jwt);
-
+app.use(passport.initialize());
+passport.use("jwt", strategies.jwt);
 // mount api v1 routes
 app.use("/v1", routes);
 
