@@ -1,3 +1,4 @@
+const httpStatus = require("http-status");
 const User = require("../models").User;
 
 exports.login = async (req, res, next) => {
@@ -11,29 +12,45 @@ exports.login = async (req, res, next) => {
     .then(user => {
       if (user) {
         if (!user) {
-          res.status(400).json("Invalid username or password");
+          res.status(httpStatus.UNAUTHORIZED);
+          res.json({
+            message: "Invalid username or password"
+          });
+          return;
         } else if (!user.validPassword(req.body.password)) {
-          res.status(400).json("Invalid username or password");
+          res.status(httpStatus.UNAUTHORIZED);
+          res.json({
+            message: "Invalid username or password"
+          });
+          return;
         } else {
           // TODO  transform user to exclude password hash
+          res.status(httpStatus.OK);
           const token = user.token();
           res.status(200).json({ token: token, user: user });
+          return;
         }
       } else {
-        res.status(400).json("Cant find user");
+        res.status(httpStatus.UNAUTHORIZED);
+        res.json({
+          message: "Invalid username or password"
+        });
+        return;
       }
     })
     .catch(err => {
-      res.status(500).send({
-        message: err.message || "Some error occurred while logging in."
+      res.status(httpStatus.INTERNAL_SERVER_ERROR);
+      res.json({
+        message: "Some error occurred while logging in."
       });
     });
 };
 exports.register = async (req, res, next) => {
   console.log(req.body);
   if (!req.body) {
-    res.status(400).send({
-      message: "Content can not be empty!"
+    res.status(httpStatus.UNAUTHORIZED);
+    res.json({
+      message: "Invalid input data. Please try again"
     });
     return;
   }
@@ -49,12 +66,13 @@ exports.register = async (req, res, next) => {
     .then(user => {
       // TODO  transform data to exclude password hash
       const token = user.token();
-      res.status(200).json({ token: token, user: user });
+      res.status(httpStatus.CREATED);
+      res.json({ token: token, user: user });
     })
     .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while creating the new user."
+      res.status(httpStatus.INTERNAL_SERVER_ERROR);
+      res.json({
+        message: "Some error occurred while creating the new user."
       });
     });
 };
