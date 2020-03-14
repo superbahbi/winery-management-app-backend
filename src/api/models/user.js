@@ -7,10 +7,51 @@ module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define(
     "User",
     {
-      username: DataTypes.STRING,
-      password: DataTypes.STRING,
-      email: DataTypes.STRING,
-      name: DataTypes.STRING,
+      username: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: {
+          msg: "This username is already taken."
+        },
+        validate: {
+          len: {
+            args: [5, 50],
+            msg: "Your username may be 5 to 50 characters only."
+          }
+        }
+      },
+      password: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          len: {
+            args: [5, 72],
+            msg: "Your password may be 5 to 72 characters only."
+          }
+        }
+      },
+      email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: {
+          msg: "This email is already taken."
+        },
+        validate: {
+          isEmail: {
+            msg: "Email address must be valid."
+          }
+        }
+      },
+      fullname: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          len: {
+            args: [5, 50],
+            msg: "Your full name may be 5 to 50 characters only."
+          }
+        }
+      },
       role: DataTypes.STRING
     },
     {
@@ -40,5 +81,6 @@ module.exports = (sequelize, DataTypes) => {
   User.associate = function(models) {
     // associations can be defined here
   };
+
   return User;
 };

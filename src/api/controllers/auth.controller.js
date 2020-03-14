@@ -15,6 +15,7 @@ exports.login = async (req, res, next) => {
         } else if (!user.validPassword(req.body.password)) {
           res.status(400).json("Invalid username or password");
         } else {
+          // TODO  transform user to exclude password hash
           const token = user.token();
           res.status(200).json({ token: token, user: user });
         }
@@ -39,13 +40,16 @@ exports.register = async (req, res, next) => {
   const newUser = {
     username: req.body.username,
     password: req.body.password,
-    name: req.body.name,
+    fullname: req.body.fullname,
     email: req.body.email,
     role: "registered"
   };
+  // TODO Check if password is match
   User.create(newUser)
-    .then(data => {
-      res.send(data);
+    .then(user => {
+      // TODO  transform data to exclude password hash
+      const token = user.token();
+      res.status(200).json({ token: token, user: user });
     })
     .catch(err => {
       res.status(500).send({

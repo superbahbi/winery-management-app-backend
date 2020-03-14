@@ -1,4 +1,5 @@
 "use strict";
+const sequelize = require("sequelize");
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable("Users", {
@@ -9,27 +10,19 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       username: {
-        type: Sequelize.STRING,
-        notEmpty: true
+        type: Sequelize.STRING
       },
       password: {
-        type: Sequelize.STRING,
-        notEmpty: true
+        type: Sequelize.STRING
       },
       email: {
-        type: Sequelize.STRING,
-        validate: {
-          isEmail: true
-        },
-        notEmpty: true
+        type: Sequelize.STRING
       },
-      name: {
-        type: Sequelize.STRING,
-        notEmpty: true
+      fullname: {
+        type: Sequelize.STRING
       },
       role: {
-        type: Sequelize.STRING,
-        notEmpty: true
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
