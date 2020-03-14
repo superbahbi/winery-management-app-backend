@@ -1,6 +1,5 @@
 const httpStatus = require("http-status");
 const User = require("../models").User;
-
 exports.login = async (req, res, next) => {
   if (!req.body) {
     res.status(400).send({
@@ -70,9 +69,16 @@ exports.register = async (req, res, next) => {
       res.json({ token: token, user: user });
     })
     .catch(err => {
+      let message = [];
+      if (err) {
+        err.errors.map(e => {
+          message.push({ message: e.message });
+        });
+      }
       res.status(httpStatus.INTERNAL_SERVER_ERROR);
       res.json({
-        message: "Some error occurred while creating the new user."
+        status: false,
+        response: message
       });
     });
 };
