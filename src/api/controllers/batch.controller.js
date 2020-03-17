@@ -1,7 +1,7 @@
 const httpStatus = require("http-status");
 const Batch = require("../models").Batch;
 exports.all = async (req, res, next) => {
-  Batch.findAll()
+  Batch.findAll({ raw: true })
     .then(batch => {
       if (batch) {
         if (!batch) {
@@ -11,8 +11,9 @@ exports.all = async (req, res, next) => {
           });
           return;
         } else {
+          console.log(batch);
           res.status(httpStatus.OK);
-          res.status(200).json({ batch: batch });
+          res.status(200).json(batch);
           return;
         }
       } else {
