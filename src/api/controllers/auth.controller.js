@@ -77,8 +77,7 @@ exports.register = async (req, res, next) => {
       }
       res.status(httpStatus.INTERNAL_SERVER_ERROR);
       res.json({
-        status: false,
-        response: message
+        message: message
       });
     });
 };
