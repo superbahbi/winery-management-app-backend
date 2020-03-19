@@ -1,5 +1,6 @@
 "use strict";
-
+// Create model example
+// sequelize model:generate --name User --attributes name:string,password:string,role:string
 const fs = require("fs");
 const path = require("path");
 const Sequelize = require("sequelize");
