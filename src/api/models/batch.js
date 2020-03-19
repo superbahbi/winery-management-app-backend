@@ -3,7 +3,7 @@ module.exports = (sequelize, DataTypes) => {
   const Batch = sequelize.define(
     "Batch",
     {
-      code: DataTypes.STRING,
+      batchCode: DataTypes.STRING,
       vintage: DataTypes.STRING,
       varietal: DataTypes.STRING,
       clone: DataTypes.STRING,

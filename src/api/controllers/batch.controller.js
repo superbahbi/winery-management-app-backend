@@ -11,7 +11,6 @@ exports.all = async (req, res, next) => {
           });
           return;
         } else {
-          console.log(batch);
           res.status(httpStatus.OK);
           res.status(200).json(batch);
           return;
@@ -32,7 +31,6 @@ exports.all = async (req, res, next) => {
     });
 };
 exports.add = async (req, res, next) => {
-  console.log(req.body);
   if (!req.body) {
     res.status(httpStatus.UNAUTHORIZED);
     res.json({
@@ -41,7 +39,7 @@ exports.add = async (req, res, next) => {
     return;
   }
   const newBatch = {
-    code: req.body.code,
+    code: req.body.batchCode,
     vintage: req.body.vintage,
     varietal: req.body.varietal,
     clone: req.body.clone,
