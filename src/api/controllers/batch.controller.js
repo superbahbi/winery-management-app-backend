@@ -49,10 +49,8 @@ exports.add = async (req, res, next) => {
     stage: req.body.stage,
     volume: req.body.volume
   };
-  // TODO Check if password is match
   Batch.create(newBatch)
     .then(batch => {
-      // TODO  transform data to exclude password hash
       res.status(httpStatus.CREATED);
       res.json({ batch: batch });
     })
@@ -85,26 +83,38 @@ exports.edit = async (req, res, next) => {
     vineyard: req.body.vineyard,
     appellation: req.body.appellation,
     stage: req.body.stage,
-    volume: req.body.volume
+    volume: req.body.volume,
+    updatedAt: new Date()
   };
-  console.log(editBatch);
-  // TODO Check if password is match
-  // Batch.create(newBatch)
-  //   .then(batch => {
-  //     // TODO  transform data to exclude password hash
-  //     res.status(httpStatus.CREATED);
-  //     res.json({ batch: batch });
-  //   })
-  //   .catch(err => {
-  //     let message = [];
-  //     if (err) {
-  //       err.errors.map(e => {
-  //         message.push({ message: e.message });
-  //       });
-  //     }
-  //     res.status(httpStatus.INTERNAL_SERVER_ERROR);
-  //     res.json({
-  //       message: message
-  //     });
-  //   });
+  Batch.update(editBatch, { where: { id: req.body.id } }).then(rowsUpdated => {
+    res.status(httpStatus.OK);
+    res.json({ message: rowsUpdated });
+  });
+};
+
+exports.delete = async (req, res, next) => {
+  if (!req.body) {
+    res.status(httpStatus.UNAUTHORIZED);
+    res.json({
+      message: "Invalid input data. Please try again"
+    });
+    return;
+  }
+  Batch.destroy({
+    where: {
+      id: req.body.id
+    }
+  }).then(
+    rowDeleted => {
+      if (rowDeleted === 1) {
+        res.status(httpStatus.OK);
+        res.json({
+          message: "Deleted successfully"
+        });
+      }
+    },
+    function(err) {
+      console.log(err);
+    }
+  );
 };
