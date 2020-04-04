@@ -31,6 +31,7 @@ exports.all = async (req, res, next) => {
     });
 };
 exports.add = async (req, res, next) => {
+  console.log(req.body);
   if (!req.body) {
     res.status(httpStatus.UNAUTHORIZED);
     res.json({
@@ -39,7 +40,7 @@ exports.add = async (req, res, next) => {
     return;
   }
   const newBatch = {
-    code: req.body.batchCode,
+    batchCode: req.body.batchCode,
     vintage: req.body.vintage,
     varietal: req.body.varietal,
     clone: req.body.clone,
@@ -67,4 +68,43 @@ exports.add = async (req, res, next) => {
         message: message
       });
     });
+};
+exports.edit = async (req, res, next) => {
+  if (!req.body) {
+    res.status(httpStatus.UNAUTHORIZED);
+    res.json({
+      message: "Invalid input data. Please try again"
+    });
+    return;
+  }
+  const editBatch = {
+    batchCode: req.body.batchCode,
+    vintage: req.body.vintage,
+    varietal: req.body.varietal,
+    clone: req.body.clone,
+    vineyard: req.body.vineyard,
+    appellation: req.body.appellation,
+    stage: req.body.stage,
+    volume: req.body.volume
+  };
+  console.log(editBatch);
+  // TODO Check if password is match
+  // Batch.create(newBatch)
+  //   .then(batch => {
+  //     // TODO  transform data to exclude password hash
+  //     res.status(httpStatus.CREATED);
+  //     res.json({ batch: batch });
+  //   })
+  //   .catch(err => {
+  //     let message = [];
+  //     if (err) {
+  //       err.errors.map(e => {
+  //         message.push({ message: e.message });
+  //       });
+  //     }
+  //     res.status(httpStatus.INTERNAL_SERVER_ERROR);
+  //     res.json({
+  //       message: message
+  //     });
+  //   });
 };

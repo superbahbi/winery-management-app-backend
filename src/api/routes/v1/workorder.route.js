@@ -1,8 +1,8 @@
 const express = require("express");
-const controller = require("../../controllers/batch.controller");
+const controller = require("../../controllers/workorder.controller");
+const { authorize } = require("../../middlewares/auth");
 const router = express.Router();
 router.route("/").get(controller.all);
 router.route("/add").post(controller.add);
-router.route("/edit").post(controller.edit);
 
 module.exports = router;
