@@ -1,20 +1,12 @@
 const httpStatus = require("http-status");
-const Vessel = require("../models").Vessel;
+const Model = require("../models").Vessel;
 exports.all = async (req, res, next) => {
-  Vessel.findAll({ raw: true })
-    .then(vessel => {
-      if (vessel) {
-        if (!vessel) {
-          res.status(httpStatus.UNAUTHORIZED);
-          res.json({
-            message: "Invalid request"
-          });
-          return;
-        } else {
-          res.status(httpStatus.OK);
-          res.status(200).json(vessel);
-          return;
-        }
+  Model.findAll({ raw: true })
+    .then(result => {
+      if (result) {
+        res.status(httpStatus.OK);
+        res.json(result);
+        return;
       } else {
         res.status(httpStatus.UNAUTHORIZED);
         res.json({
@@ -26,19 +18,17 @@ exports.all = async (req, res, next) => {
     .catch(err => {
       res.status(httpStatus.INTERNAL_SERVER_ERROR);
       res.json({
-        message: "Some error occurred while looking for vessels."
+        message: "Some error occurred while looking for data."
       });
     });
 };
 exports.add = async (req, res, next) => {
-  if (!req.body) {
-    res.status(httpStatus.UNAUTHORIZED);
-    res.json({
-      message: "Invalid input data. Please try again"
-    });
+  if (Object.keys(req.body).length === 0) {
+    res.status(httpStatus.OK);
+    res.json([{ message: "Invalid input data. Please try again" }]);
     return;
   }
-  const newVessel = {
+  const newData = {
     vesselCode: req.body.vesselCode,
     batchCode: req.body.batchCode,
     type: req.body.type,
@@ -48,12 +38,11 @@ exports.add = async (req, res, next) => {
     toast: req.body.toast,
     cooper: req.body.cooper
   };
-  // TODO Check if password is match
-  Vessel.create(newVessel)
-    .then(vessel => {
-      // TODO  transform data to exclude password hash
+
+  Model.create(newData)
+    .then(result => {
       res.status(httpStatus.CREATED);
-      res.json({ vessel: vessel });
+      res.json({ result: result });
     })
     .catch(err => {
       let message = [];
@@ -67,4 +56,47 @@ exports.add = async (req, res, next) => {
         message: message
       });
     });
+};
+exports.edit = async (req, res, next) => {
+  if (Object.keys(req.body).length === 0) {
+    res.status(httpStatus.OK);
+    res.json([{ message: "Invalid input data. Please try again" }]);
+    return;
+  }
+  const editData = {
+    vesselCode: req.body.vesselCode,
+    batchCode: req.body.batchCode,
+    type: req.body.type,
+    currentVolume: req.body.currentVolume,
+    maxVolume: req.body.maxVolume,
+    status: req.body.status,
+    toast: req.body.toast,
+    cooper: req.body.cooper,
+    updatedAt: new Date()
+  };
+  Model.update(editData, { where: { id: req.body.id } }).then(rowsUpdated => {
+    res.status(httpStatus.OK);
+    res.json({ message: rowsUpdated });
+  });
+};
+
+exports.delete = async (req, res, next) => {
+  if (Object.keys(req.body).length === 0) {
+    res.status(httpStatus.OK);
+    res.json([{ message: "Invalid input data. Please try again" }]);
+    return;
+  }
+  Model.destroy({
+    where: {
+      // TODO: validate id
+      id: req.body.id
+    }
+  }).then(rowDeleted => {
+    if (rowDeleted === 1) {
+      res.status(httpStatus.OK);
+      res.json({
+        message: "Deleted successfully"
+      });
+    }
+  });
 };
