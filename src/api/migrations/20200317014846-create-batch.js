@@ -6,43 +6,43 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       batchCode: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       vintage: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       varietal: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
-      clone: {
-        type: Sequelize.STRING
+      block: {
+        type: Sequelize.STRING,
       },
       vineyard: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       appellation: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       stage: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       volume: {
-        type: Sequelize.DECIMAL
+        type: Sequelize.DECIMAL,
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
   down: (queryInterface, Sequelize) => {
     return queryInterface.dropTable("Batches");
-  }
+  },
 };

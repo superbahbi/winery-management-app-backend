@@ -6,15 +6,15 @@ module.exports = (sequelize, DataTypes) => {
       batchCode: DataTypes.STRING,
       vintage: DataTypes.STRING,
       varietal: DataTypes.STRING,
-      clone: DataTypes.STRING,
+      block: DataTypes.STRING,
       vineyard: DataTypes.STRING,
       appellation: DataTypes.STRING,
       stage: DataTypes.INTEGER,
-      volume: DataTypes.DECIMAL
+      volume: DataTypes.DECIMAL,
     },
     {}
   );
-  Batch.associate = function(models) {
+  Batch.associate = function (models) {
     // associations can be defined here
   };
   return Batch;
